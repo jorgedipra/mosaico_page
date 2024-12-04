@@ -14,7 +14,16 @@ Este proyecto es un prototipo de página de inicio para un navegador web, inspir
 - **HTML5**: Estructura básica de la página.
 - **CSS3**: Estilos para darle vida a la interfaz, incluyendo un esquema de colores y efectos visuales.
 - **JavaScript**: Funcionalidad básica para simular la experiencia de usuario, incluyendo interacciones.
-  
+
+## Vista
+![image](https://github.com/user-attachments/assets/c12c5995-af77-4a77-814d-b96625aadea6)
+![image](https://github.com/user-attachments/assets/2555dfda-8c93-4ff1-b818-daf6c48f7831)
+
+![image](https://github.com/user-attachments/assets/3f4c0039-1ef3-4991-a6fd-ab99465aa6ac)
+## Vista final:
+![image](https://github.com/user-attachments/assets/4e619844-853e-492c-b7de-d5ff10c9c7a9)
+
+
 ## Instalación
 
 Para usar este prototipo en tu entorno local, sigue estos pasos:
@@ -48,10 +57,3 @@ Las contribuciones son bienvenidas. Si deseas mejorar el proyecto, puedes hacer 
 ## Licencia
 
 Este proyecto está bajo la **Licencia MIT**. Puedes usarlo, modificarlo y distribuirlo de acuerdo a los términos de la licencia.
-## Vista
-![image](https://github.com/user-attachments/assets/c12c5995-af77-4a77-814d-b96625aadea6)
-![image](https://github.com/user-attachments/assets/2555dfda-8c93-4ff1-b818-daf6c48f7831)
-
-![image](https://github.com/user-attachments/assets/3f4c0039-1ef3-4991-a6fd-ab99465aa6ac)
-## Vista final:
-![image](https://github.com/user-attachments/assets/4e619844-853e-492c-b7de-d5ff10c9c7a9)
