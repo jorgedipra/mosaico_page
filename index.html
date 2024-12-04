@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Rápido</title>
+    <link rel="stylesheet" href="./Orbitron/css.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1 id="time">Mosaico de Páginas</h1>
+            <button id="addPageBtn">
+                <i class="fas fa-plus"></i> Agregar Página
+            </button>
+            <section>
+                <button id="sw">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button id="changeBackgroundBtn">
+                    <i class="fas fa-paint-brush"></i> Cambiar Fondo
+                </button> <br>
+                <article class="sw" style="margin-left: 23px;">
+                    <button id="exportBtn">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>&nbsp;
+                    <button id="importBtn">
+                        <i class="fas fa-file-import"></i> Importar
+                    </button>
+                    <input type="file" id="importFileInput" accept=".txt" style="display: none;">
+                </article>
+            </section>
+        </header>
+        <article class="flex">
+            <div class="searchbar">
+                <div class="searchbar-wrapper">
+                    <div class="searchbar-left">
+                        <div class="search-icon-wrapper">
+                            <span class="search-icon searchbar-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                                    </path>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="searchbar-center">
+                        <div class="searchbar-input-spacer"></div>
+                        <input type="text" id="buscador" class="searchbar-input" maxlength="2048" name="q"
+                            autocapitalize="off" autocomplete="off" title="Search" role="combobox" placeholder="Search">
+                    </div>
+
+                    <div class="searchbar-right">
+                        <div class="custom-select" id="searchEngine">
+                            <div class="selected-option">
+                                <img src="./img/google.png" alt="Google" data-value="google">
+                            </div>
+                            <div class="options">
+                                <div class="option" data-value="google">
+                                    <img src="./img/google.png" alt="Google"> Google
+                                </div>
+                                <div class="option" data-value="chatgpt">
+                                    <img src="./img/ChatGPT.png" alt="ChatGPT"> ChatGPT
+                                </div>
+                                <div class="option" data-value="duckduckgo">
+                                    <img src="./img/The_DuckDuckGo_Duck.png" alt="DuckDuckGo"> DuckDuckGo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <div id="groupContainer" class="group-container"></div>
+    </div>
+
+    <!-- Modal para agregar/editar página -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content form">
+            <span id="closeModal" class="close">&times;</span>
+            <h2 id="modalTitle" class="title">Agregar Página</h2>
+            <form action="#" id="addPageForm">
+                <div class="flex">
+                    <label for="groupName">
+                        <input type="text" id="groupName" class="input" placeholder="Nombre del grupo" required>
+                        <span>Grupo:</span>
+                    </label>
+
+                    <label for="pageTitle">
+                        <input type="text" id="pageTitle" class="input" placeholder="Nombre de la página" required>
+                        <span>Página:</span>
+                    </label>
+                </div>
+                <div class="flex">
+                    <label for="pageURL" class="flex-auto">
+                        <input type="url" id="pageURL" class="input" placeholder="https://ejemplo.com" required>
+                        <span>URL de la Página:</span>
+                    </label>
+                </div>
+                <div class="flex">
+                    <label for="imageURL" class="flex-auto">
+                        <input type="url" id="imageURL" class="input" placeholder="https://ejemplo.com/imagen.jpg"
+                            required>
+                        <span>URL de la Imagen:</span>
+                    </label>
+                </div>
+                <hr>
+                <button type="submit" id="submit" class="submit">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar todos los elementos de un grupo -->
+    <div id="viewGroupModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeViewGroupModal" class="close">&times;</span>
+            <h2 id="viewGroupTitle">Elementos del Grupo</h2>
+            <div id="groupElementsContainer" class="group-elements-container scroll"></div>
+        </div>
+    </div>
+
+    <!-- Modal para cambiar el fondo -->
+    <div id="changeBackgroundModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeChangeBackgroundModal" class="close">&times;</span>
+            <h2>Cambiar Fondo</h2>
+            <form id="backgroundForm">
+                <label for="backgroundColor">Color de Fondo:</label>
+                <input type="color" id="backgroundColor" value="#1a1a1a">
+
+                <label for="backgroundImage">URL de Imagen de Fondo:</label>
+                <input type="url" id="backgroundImage" placeholder="images/fondo2.png">
+
+                <button type="submit">Aplicar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
