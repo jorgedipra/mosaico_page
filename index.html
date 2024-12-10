@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Rápido</title>
+    <link rel="icon" type="image/x-icon" href="ico.png">
     <link rel="stylesheet" href="./Orbitron/css.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -91,25 +92,38 @@
                     <label for="groupName">
                         <input type="text" id="groupName" class="input" placeholder="Nombre del grupo" required>
                         <span>Grupo:</span>
+                        <button class="copy-btn" onclick="copyToClipboard('groupName')">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </label>
 
                     <label for="pageTitle">
                         <input type="text" id="pageTitle" class="input" placeholder="Nombre de la página" required>
                         <span>Página:</span>
+                        <button class="copy-btn" onclick="copyToClipboard('pageTitle')">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </label>
                 </div>
                 <div class="flex">
                     <label for="pageURL" class="flex-auto">
                         <input type="url" id="pageURL" class="input" placeholder="https://ejemplo.com" required>
                         <span>URL de la Página:</span>
+                        <button class="copy-btn trt-btn" onclick="copyToClipboard('pageURL')">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </label>
                 </div>
                 <div class="flex">
                     <label for="imageURL" class="flex-auto">
-                        <input type="url" id="imageURL" class="input" placeholder="https://ejemplo.com/imagen.jpg"
-                            required>
-                        <span>URL de la Imagen:</span>
+                        <br> <input type="url" id="imageURL" class="input" placeholder="https://ejemplo.com/imagen.jpg"
+                            >
+                        <span>URL de la Imagen Personalizada:</span>
+                        <button class="copy-btn" onclick="copyToClipboard('imageURL')">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </label>
+                    <img id="vistaprevia" src="./img/ico.png" alt="Vista previa de la imagen"  width="100" />
                 </div>
                 <hr>
                 <button type="submit" id="submit" class="submit">Guardar</button>

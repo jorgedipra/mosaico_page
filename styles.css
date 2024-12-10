@@ -177,7 +177,7 @@ button i {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-height: 350px;
+  max-height: 370px;
   overflow-y: auto;
 }
 
@@ -535,6 +535,40 @@ select#searchEngine {
 
 .custom-select.active .options {
   display: block;
+}
+/* copi */
+.copy-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  position:absolute;
+  margin-top: -58px;
+  margin-left: 149px;
+}
+.copy-btn:nth-child(4) {
+  margin-top: -62px;
+  margin-left: 209px;
+}
+.copy-btn.trt-btn{
+  margin-top: -69px;
+  margin-left: 321px;
+}
+.copy-btn:hover {
+  background: #45a06929;
+  padding: 5px;
+}
+.copy-btn i {
+  font-size: 18px;
+  color: #007bff;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 @keyframes pulse {
