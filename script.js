@@ -45,6 +45,9 @@ function renderGroups() {
     Object.keys(data).forEach((groupName, index) => {
         const group = document.createElement("div");
         group.className = "group";
+        if (groupName === "IA") {
+            group.classList.add("ia-group");
+        }
         group.setAttribute("draggable", "true"); // Hacer el grupo arrastrable
         group.dataset.index = index; // Guardar el índice para manejar el orden
         group.innerHTML = `
@@ -343,7 +346,7 @@ function openGroupModal(groupName) {
 
     // Add "Add page to this group" button
     const addPageToGroupBtn = document.createElement('button');
-    addPageToGroupBtn.textContent = 'Agregar página a este grupo';
+    addPageToGroupBtn.innerHTML = '<i class="fas fa-plus"></i> Agregar página a este grupo';
     addPageToGroupBtn.id = 'addPageToGroupBtn'; // give it an id to prevent duplicates
     addPageToGroupBtn.style.marginTop = '15px'; // Add some margin
     addPageToGroupBtn.addEventListener('click', () => {
