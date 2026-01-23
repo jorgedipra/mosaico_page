@@ -164,7 +164,9 @@ function editPage(groupName, pageIndex) {
 
     const page = data[groupName][pageIndex];
 
-    document.getElementById("groupName").value = groupName;
+    const groupNameInput = document.getElementById("groupName");
+    groupNameInput.value = groupName;
+    groupNameInput.readOnly = true;
     document.getElementById("pageTitle").value = page.title;
     document.getElementById("pageURL").value = page.url;
     document.getElementById("imageURL").value = page.image;
@@ -211,7 +213,8 @@ function img_loader(){
 addPageForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const groupName = document.getElementById("groupName").value;
+    const groupNameInput = document.getElementById("groupName");
+    const groupName = groupNameInput.value;
     const pageTitle = document.getElementById("pageTitle").value;
     const pageURL = document.getElementById("pageURL").value;
     let  imageURL = document.getElementById("imageURL").value;
@@ -229,6 +232,8 @@ addPageForm.addEventListener("submit", (e) => {
     localStorage.setItem("pageGroups", JSON.stringify(data));
     renderGroups();
     modal.classList.add("hidden");
+    groupNameInput.readOnly = false; // Reset readonly state
+
     if (localStorage.getItem("pageIndex") != "")
         deletePageDitect(localStorage.getItem("groupName"), localStorage.getItem("pageIndex"));
     localStorage.setItem('pageIndex', "");
@@ -278,6 +283,7 @@ buscador.addEventListener('keypress', (e) => {
 addPageBtn.addEventListener("click", () => {
     addPageForm.reset();
     document.getElementById("modalTitle").textContent = "Agregar Página";
+    document.getElementById('groupName').readOnly = false; // Ensure it's editable
     modal.classList.remove("hidden");
 });
 
@@ -290,41 +296,44 @@ function openGroupModal(groupName) {
     groupElementsContainer.innerHTML = group.map((page, index) => {
         return `
         <div id="${page.title}" class="page-item">
-            <a href="${page.url}">
+            <a href="${page.url}" target="_blank" rel="noopener noreferrer">
                 <img src="${page.image}" alt="${page.title}" class="page-img">
+                <p>${page.title}</p>
             </a>
-            <p>${page.title}</p>
-            
-            <button class="edit-btn sw" onclick="editPage('${groupName}', ${index})">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button class="delete-btn sw" onclick="deletePage('${groupName}', ${index})">
-                <i class="fas fa-trash"></i>
-            </button>
+            <div class="controls">
+                <button class="edit-btn sw" onclick="editPage('${groupName}', ${index})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="delete-btn sw" onclick="deletePage('${groupName}', ${index})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
         </div>
         `;
     }).join("");
 
-    // Asignar el evento de abrir el enlace en una nueva ventana
-    const pageItems = document.querySelectorAll('.page-item');
-    pageItems.forEach((item, index) => {
-        item.addEventListener("click", () => {
-            const page = group[index];
-            const img = item.querySelector('img');
-            const p = item.querySelector('p');
+    // Remove existing button before adding a new one
+    const existingBtn = document.getElementById('addPageToGroupBtn');
+    if (existingBtn) {
+        existingBtn.remove();
+    }
 
-            // Realizar acciones dependiendo de qué se haga clic
-            if (event.target === img || event.target === p) {
-                if (!event.ctrlKey) {
-                    // window.open(page.url, "_blank"); // nueva pagina
-                    window.open(page.url, "_self");
-                    viewGroupModal.classList.add("oscuro");
-                    document.querySelector('.oscuro .modal-content').classList.add("hidden");
-                }
-            }
-
-        });
+    // Add "Add page to this group" button
+    const addPageToGroupBtn = document.createElement('button');
+    addPageToGroupBtn.textContent = 'Agregar página a este grupo';
+    addPageToGroupBtn.id = 'addPageToGroupBtn'; // give it an id to prevent duplicates
+    addPageToGroupBtn.style.marginTop = '15px'; // Add some margin
+    addPageToGroupBtn.addEventListener('click', () => {
+        viewGroupModal.classList.add('hidden');
+        addPageForm.reset();
+        const groupNameInput = document.getElementById('groupName');
+        document.getElementById('modalTitle').textContent = 'Agregar Página';
+        groupNameInput.value = groupName;
+        groupNameInput.readOnly = true; // Make it readonly
+        modal.classList.remove('hidden');
     });
+    
+    groupElementsContainer.insertAdjacentElement('afterend', addPageToGroupBtn);
 
     // Mostrar el modal
     viewGroupModal.classList.remove("hidden");
@@ -367,13 +376,15 @@ if (modalContent) {
 // Escuchar el clic en el contenedor principal del modal
 modal.addEventListener("click", (event) => {
     if (event.target === modal) {
-        modal.classList.add("hidden")
+        modal.classList.add("hidden");
+        document.getElementById('groupName').readOnly = false; // Reset readonly state
     }
 });
 
 // Escuchar el clic en el botón para cerrar el modal
 closeModal.addEventListener("click", (event) => {
-    modal.classList.add("hidden")
+    modal.classList.add("hidden");
+    document.getElementById('groupName').readOnly = false; // Reset readonly state
     event.stopPropagation(); // Evita que el evento se propague al contenedor principal
 });
 
@@ -459,6 +470,7 @@ setInterval(updateClock, 1000);
 
 // Aplicar inicializaciones
 document.addEventListener("DOMContentLoaded", () => {
+    createToastContainer();
     renderGroups();
     sw_();
     restaurar();
@@ -468,6 +480,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+function createToastContainer() {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    return container;
+}
+
+function showToast(message, type = 'success', duration = 3000) {
+    const container = document.getElementById('toast-container');
+    if (!container) {
+        console.error('Toast container not found!');
+        return;
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    
+    container.appendChild(toast);
+
+    // Animate in
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10); // Small delay to allow CSS transition
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        // Remove element after transition
+        toast.addEventListener('transitionend', () => toast.remove());
+    }, duration);
+}
 
 function sw_() {
     const sw = document.getElementById("sw"); // Botón o activador
@@ -553,12 +600,12 @@ function restaurar() {
                         data = importedData;
                         localStorage.setItem("pageGroups", JSON.stringify(data));
                         renderGroups(); // Renderizar los grupos actualizados
-                        alert("Datos importados correctamente.");
+                        showToast("Datos importados correctamente.", "success");
                     } else {
                         throw new Error("Formato de datos inválido.");
                     }
                 } catch (error) {
-                    alert("Error al importar los datos: " + error.message);
+                    showToast("Error al importar los datos: " + error.message, "error");
                 }
             };
             reader.readAsText(file);
@@ -639,20 +686,32 @@ function toggleEditMode() {
 }
 
 function copyToClipboard(inputId) {
-    // Obtener el valor del campo de entrada
-    var input = document.getElementById(inputId);
-    
-    // Seleccionar el contenido del campo
-    input.select();
-    input.setSelectionRange(0, 99999); // Para dispositivos móviles
+    const e = event;
+    e.preventDefault(); 
+    e.stopPropagation(); 
 
-    // Copiar al portapapeles
-    document.execCommand("copy");
+    const input = document.getElementById(inputId);
+    const textToCopy = input.value;
 
-    // Confirmación visual (opcional)
-    // alert('¡Texto copiado al portapapeles!');
-    event.preventDefault(); 
-    event.stopPropagation(); 
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const button = e.target.closest('.copy-btn');
+        if (!button) return;
+
+        const icon = button.querySelector('i');
+        if (icon) {
+            const originalClass = icon.className;
+            icon.className = 'fas fa-check';
+            icon.style.color = '#28a745';
+
+            setTimeout(() => {
+                icon.className = originalClass;
+                icon.style.color = '';
+            }, 1500);
+        }
+    }).catch(err => {
+        console.error('Error al copiar texto: ', err);
+    });
+
     return false; 
 }
 

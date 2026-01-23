@@ -92,6 +92,11 @@ button#addPageBtn {
   border-radius: 0 12% 5px 5px;
 }
 
+.group.dragging {
+  opacity: 0.5;
+  border: 2px dashed #fff;
+}
+
 .group h3 {
   margin: 0px 4px;
   width: 100px;
@@ -202,8 +207,27 @@ button i {
 }
 
 .page-item {
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+}
+
+.page-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.page-item a:hover {
+  opacity: 0.8;
+}
+
+.page-item .controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
 }
 
 .page-item p {
@@ -611,4 +635,37 @@ select#searchEngine {
   --scroll-radius: 10px;
   --scroll-track: rgb(0 0 0 / 40%);
   --scroll-thumb-color: #dfdfdf;
+}
+/* Toast Notification System */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    max-width: 300px;
+    transform: translateX(110%);
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: #dc3545;
 }
