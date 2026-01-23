@@ -45,9 +45,9 @@ function renderGroups() {
     Object.keys(data).forEach((groupName, index) => {
         const group = document.createElement("div");
         group.className = "group";
-        if (groupName === "IA") {
-            group.classList.add("ia-group");
-        }
+        // if (groupName === "IA") {
+        //     group.classList.add("ia-group");
+        // }
         group.setAttribute("draggable", "true"); // Hacer el grupo arrastrable
         group.dataset.index = index; // Guardar el índice para manejar el orden
         group.innerHTML = `
@@ -132,6 +132,65 @@ function saveGroupOrder() {
     });
     data = newData;
     localStorage.setItem("pageGroups", JSON.stringify(data));
+}
+
+// Drag-and-Drop para las páginas dentro de un grupo
+function enablePageDragAndDrop(groupName) {
+    const pageItems = groupElementsContainer.querySelectorAll(".page-item");
+    let draggedPage = null;
+
+    pageItems.forEach(item => {
+        item.addEventListener("dragstart", (e) => {
+            draggedPage = item;
+            item.classList.add("dragging");
+        });
+
+        item.addEventListener("dragend", () => {
+            item.classList.remove("dragging");
+            draggedPage = null;
+        });
+
+        item.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            const afterElement = getDragAfterPageElement(groupElementsContainer, e.clientY);
+            if (afterElement == null) {
+                groupElementsContainer.appendChild(draggedPage);
+            } else {
+                groupElementsContainer.insertBefore(draggedPage, afterElement);
+            }
+        });
+
+        item.addEventListener("drop", (e) => {
+            e.preventDefault();
+            if (!draggedPage) return;
+
+            const oldIndex = parseInt(draggedPage.dataset.index);
+            const newIndex = [...groupElementsContainer.querySelectorAll(".page-item")].indexOf(draggedPage);
+
+            // Update data array
+            const pageData = data[groupName];
+            const [movedPage] = pageData.splice(oldIndex, 1);
+            pageData.splice(newIndex, 0, movedPage);
+
+            // Save and re-render
+            localStorage.setItem("pageGroups", JSON.stringify(data));
+            openGroupModal(groupName); // Re-render the modal
+        });
+    });
+}
+
+function getDragAfterPageElement(container, y) {
+    const draggableElements = [...container.querySelectorAll(".page-item:not(.dragging)")];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 // Eliminar grupo
@@ -321,7 +380,7 @@ function openGroupModal(groupName) {
 
     groupElementsContainer.innerHTML = group.map((page, index) => {
         return `
-        <div id="${page.title}" class="page-item">
+        <div id="${page.title}" class="page-item" draggable="true" data-index="${index}">
             <a href="${page.url}" target="_blank" rel="noopener noreferrer">
                 <img src="${page.image}" alt="${page.title}" class="page-img">
                 <p>${page.title}</p>
@@ -363,7 +422,8 @@ function openGroupModal(groupName) {
 
     // Mostrar el modal
     viewGroupModal.classList.remove("hidden");
-    sw_()
+    sw_();
+    enablePageDragAndDrop(groupName);
 }
 
 
