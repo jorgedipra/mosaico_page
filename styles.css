@@ -400,27 +400,27 @@ button i {
 /* buscador */
 /* From Uiverse.io by TimTrayler */
 .searchbar {
-  font-size: 14px;
-  font-family: arial, sans-serif;
-  color: #202124;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
   display: flex;
   flex: auto;
   z-index: 3;
   height: 44px;
-  background: #202124db;
-  border: 1px solid #676c77;
-  box-shadow: none;
-  border-radius: 12px;
+  background: #001f3f;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 4px #000;
+  border-radius: 0;
   margin: 20px auto;
   width: auto;
   max-width: 400px;
   margin-bottom: 40px;
   z-index: 1;
+  padding: 5px;
 }
 
 .searchbar:hover {
-  box-shadow: 0 1px 6px rgb(32 33 36 / 28%);
-  border-color: rgba(223, 225, 229, 0.664);
+  box-shadow: 0 0 0 4px #000, 0 0 15px #fff;
+  border-color: #fff;
 }
 
 .searchbar-wrapper {
@@ -683,4 +683,23 @@ select#searchEngine {
 
 .toast.error {
     background-color: #dc3545;
+}
+
+/* 8-bit style buttons */
+#sw, #exportBtn, #importBtn, .edit-btn, .delete-btn {
+    background: #5cdb95;
+    color: #000;
+    border: 2px solid #000;
+    border-radius: 0;
+    box-shadow: 3px 3px 0 #000;
+    transition: all .2s;
+    padding: 5px 10px;
+    font-size: 14px; /* smaller font */
+}
+
+#sw:hover, #exportBtn:hover, #importBtn:hover, .edit-btn:hover, .delete-btn:hover {
+    background: #45a069;
+    box-shadow: 0 0 0 #000;
+    transform: translate(3px, 3px);
+    color: #fff;
 }

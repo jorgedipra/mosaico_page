@@ -139,6 +139,29 @@ function deleteGroup(groupName) {
         renderGroups();
     }
 }
+
+// Editar grupo
+function editGroup(groupName) {
+    const newGroupName = prompt(`Ingresa el nuevo nombre para el grupo "${groupName}":`, groupName);
+
+    if (newGroupName && newGroupName !== groupName) {
+        // Create a new data object with the updated group name
+        const newData = {};
+        Object.keys(data).forEach(key => {
+            if (key === groupName) {
+                newData[newGroupName] = data[groupName];
+            } else {
+                newData[key] = data[key];
+            }
+        });
+        
+        data = newData;
+        localStorage.setItem("pageGroups", JSON.stringify(data));
+        renderGroups();
+    }
+}
+
+
 // Eliminar página
 function deletePage(groupName, pageIndex) {
     if (confirm("¿Estás seguro de eliminar esta página?")) {
@@ -195,7 +218,7 @@ function img_loader(){
         vistaprevia.src = imageUrl; // Actualiza la vista previa con la URL ingresada
     } else {
         let  domain = pageURL.value.trim() || "example.com"; // Usa el dominio ingresado o un predeterminado
-        domain = domain.replace(/^https?:\/\//, ""); // Elimina 'http://' o 'https://'
+        domain = domain.replace(/^https?:\/\//, ""); // Elimina 'http://' o 'https/'
         const faviconURL = `https://api.faviconkit.com/${domain}/64`; // Genera la URL del favicon
         vistaprevia.src = faviconURL; // Actualiza la vista previa con el favicon
     }
