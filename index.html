@@ -92,7 +92,7 @@
             <h2 id="modalTitle" class="title">Agregar Página</h2>
             <form action="#" id="addPageForm">
                 <div class="flex">
-                    <label for="groupNameInput">
+                    <label for="groupNameInput" class="input-label">
                         <input type="text" id="groupNameInput" class="input" list="groupDatalist" placeholder="Selecciona o crea grupo" autocomplete="off">
                         <span>Grupo:</span>
                         <button class="copy-btn" onclick="copyToClipboard('groupNameInput')">
@@ -101,7 +101,7 @@
                     </label>
                     <datalist id="groupDatalist"></datalist>
 
-                    <label for="pageTitle">
+                    <label for="pageTitle" class="input-label">
                         <input type="text" id="pageTitle" class="input" placeholder="Nombre de la página" required>
                         <span>Página:</span>
                         <button class="copy-btn" onclick="copyToClipboard('pageTitle')">
@@ -110,7 +110,7 @@
                     </label>
                 </div>
                 <div class="flex">
-                    <label for="pageURL" class="flex-auto">
+                    <label for="pageURL" class="input-label flex-auto">
                         <input type="url" id="pageURL" class="input" placeholder="https://ejemplo.com" required>
                         <span>URL de la Página:</span>
                         <button class="copy-btn trt-btn" onclick="copyToClipboard('pageURL')">
@@ -119,7 +119,7 @@
                     </label>
                 </div>
                 <div class="flex">
-                    <label for="imageURL" class="flex-auto">
+                    <label for="imageURL" class="input-label flex-auto">
                         <br> <input type="url" id="imageURL" class="input" placeholder="https://ejemplo.com/imagen.jpg"
                             >
                         <span>URL de la Imagen Personalizada:</span>
@@ -129,10 +129,10 @@
                     </label>
                     <img id="vistaprevia" src="./img/ico.png" alt="Vista previa de la imagen"  width="100" />
                 </div>
-                <div class="image-preview-options" id="imagePreviewOptions">
-                    <span class="preview-label">Previsualización:</span>
-                    <div class="preview-images" id="previewImages">
-                        <div class="preview-loading">Ingresa una URL para ver previews</div>
+                <div class="icon-preview-options" id="iconPreviewOptions">
+                    <span class="icon-label">Iconos:</span>
+                    <div class="icon-list" id="iconList">
+                        <div class="icon-loading">Ingresa una URL para ver iconos</div>
                     </div>
                 </div>
                 <hr>

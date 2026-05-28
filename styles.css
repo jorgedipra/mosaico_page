@@ -280,7 +280,7 @@ button i {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 350px;
+  max-width: 500px;
   padding: 20px;
   border-radius: 20px;
   position: relative;
@@ -344,28 +344,33 @@ button i {
   display: flex;
   width: 100%;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .flex-auto {
-  flex: auto;
+  flex: 1 1 100%;
+  min-width: 200px;
 }
 
-.form label {
+.form label.input-label {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .form label .input {
   background-color: #222;
   color: #fff;
-  width: 92%;
-  padding: 10px;
+  width: 100%;
+  padding: 10px 40px 10px 10px;
   outline: 0;
   border: 3px solid #000;
   border-radius: 0;
   box-shadow: 0 3px 0 #000;
-  margin: 6% 6px;
+  margin: 6% 0;
   font-family: 'Press Start 2P', cursive;
   font-size: 8px;
+  box-sizing: border-box;
 }
 
 .form label .input+span {
@@ -391,6 +396,15 @@ button i {
   top: 0px;
   font-size: 0.7em;
   font-weight: 600;
+}
+
+#pageTitle+span {
+  top: 1.5px !important;
+}
+
+#imageURL+span {
+  width: 450px !important;
+  top: 30px !important;
 }
 
 .input {
@@ -593,18 +607,19 @@ select#searchEngine {
   cursor: pointer;
   padding: 5px;
   position: absolute;
-  margin-top: -58px;
-  margin-left: 149px;
+  right: 5px;
+  top: 5px;
+  z-index: 1;
 }
 
 .copy-btn:nth-child(4) {
-  margin-top: -62px;
-  margin-left: 209px;
+  right: 5px;
+  top: 39px;
 }
 
 .copy-btn.trt-btn {
-  margin-top: -69px;
-  margin-left: 321px;
+  right: 5px;
+  top: 22px;
 }
 
 .copy-btn:hover {
@@ -893,11 +908,11 @@ select#searchEngine {
   width: 200px;
 }
 
-.image-preview-options {
+.icon-preview-options {
   margin-top: 10px;
 }
 
-.preview-label {
+.icon-label {
   font-family: 'Press Start 2P', cursive;
   font-size: 8px;
   color: rgba(255, 255, 255, 0.5);
@@ -905,41 +920,55 @@ select#searchEngine {
   margin-bottom: 5px;
 }
 
-.preview-images {
+.icon-list {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.preview-item {
-  width: 80px;
-  height: 60px;
+.icon-item {
+  width: 70px;
+  height: 70px;
   border: 3px solid #000;
   border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s;
-  background: #222;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
 }
 
-.preview-item:hover {
+.icon-item:hover {
   border-color: #5cdb95;
   transform: scale(1.05);
 }
 
-.preview-item.selected {
+.icon-item.selected {
   border-color: #5cdb95;
   box-shadow: 0 0 10px #5cdb95;
 }
 
-.preview-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.icon-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
-.preview-loading {
+.icon-loading {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.5);
   padding: 20px;
+}
+
+.icon-source-label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+  text-align: center;
+  margin-top: 2px;
 }

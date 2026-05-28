@@ -277,37 +277,44 @@ document.getElementById("pageTitle").addEventListener("input", function() {
     }
 });
 
-async function loadImagePreviews(url, domain) {
-    const previewContainer = document.getElementById("previewImages");
+async function loadIconPreviews(domain) {
+    const iconContainer = document.getElementById("iconList");
+    iconContainer.innerHTML = "";
     
-    const previewSources = [
-        `https://api.faviconkit.com/${domain}/64`,
-        `https://logo.clearbit.com/${domain}`,
-        `https://www.favicon.im/real/${domain}.png`
+    const iconSources = [
+        { name: "Simple Icons", getUrl: (d) => `https://cdn.simpleicons.org/${d}` },
+        { name: "Iconify Logos", getUrl: (d) => `https://api.iconify.design/logos:${d.toLowerCase()}-icon.svg` },
+        { name: "Iconify MDI", getUrl: (d) => `https://api.iconify.design/mdi:${d.toLowerCase()}.svg` },
+        { name: "SVGRepo", getUrl: (d) => `https://www.svgrepo.com/show/13671/${d.toLowerCase()}.svg` }
     ];
     
-    previewContainer.innerHTML = "";
-    
-    for (let i = 0; i < previewSources.length; i++) {
+    for (let i = 0; i < iconSources.length; i++) {
+        const source = iconSources[i];
         const div = document.createElement("div");
-        div.className = "preview-item";
-        div.dataset.url = previewSources[i];
+        div.className = "icon-item";
+        div.dataset.source = source.name;
+        
+        const label = document.createElement("span");
+        label.className = "icon-source-label";
+        label.textContent = source.name;
         
         const img = document.createElement("img");
-        img.src = previewSources[i];
-        img.alt = `Preview ${i + 1}`;
+        img.src = source.getUrl(domain);
+        img.alt = source.name;
+        img.style.backgroundColor = "#fff";
         
         img.onerror = () => {
             div.style.display = "none";
         };
         
         div.appendChild(img);
-        previewContainer.appendChild(div);
+        div.appendChild(label);
+        iconContainer.appendChild(div);
         
         div.addEventListener("click", () => {
-            document.querySelectorAll(".preview-item").forEach(p => p.classList.remove("selected"));
+            document.querySelectorAll(".icon-item").forEach(p => p.classList.remove("selected"));
             div.classList.add("selected");
-            document.getElementById("imageURL").value = previewSources[i];
+            document.getElementById("imageURL").value = source.getUrl(domain);
             img_loader();
         });
     }
@@ -318,8 +325,9 @@ pageURL.addEventListener("input", () => {
     if (url) {
         try {
             const urlObj = new URL(url);
-            const domain = urlObj.hostname.replace('www.', '');
-            loadImagePreviews(url, domain);
+            let domain = urlObj.hostname.replace('www.', '');
+            domain = domain.split('.')[0];
+            loadIconPreviews(domain);
         } catch {
             // URL inválida
         }
