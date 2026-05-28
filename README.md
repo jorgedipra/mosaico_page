@@ -75,6 +75,9 @@ python -m http.server 8000
 ## Vista
 
 ![Vista principal](https://github.com/user-attachments/assets/c12c5995-af77-4a77-814d-b96625aadea6)
+![Vista grupos](https://github.com/user-attachments/assets/2555dfda-8c93-4ff1-b818-daf6c48f7831)
+![Vista modal](https://github.com/user-attachments/assets/3f4c0039-1ef3-4991-a6fd-ab99465aa6ac)
+![Vista final](https://github.com/user-attachments/assets/4e619844-853e-492c-b7de-d5ff10c9c7a9)
 
 ## Licencia
 
