@@ -92,13 +92,14 @@
             <h2 id="modalTitle" class="title">Agregar Página</h2>
             <form action="#" id="addPageForm">
                 <div class="flex">
-                    <label for="groupName">
-                        <input type="text" id="groupName" class="input" placeholder="Nombre del grupo" required>
+                    <label for="groupNameInput">
+                        <input type="text" id="groupNameInput" class="input" list="groupDatalist" placeholder="Selecciona o crea grupo" autocomplete="off">
                         <span>Grupo:</span>
-                        <button class="copy-btn" onclick="copyToClipboard('groupName')">
+                        <button class="copy-btn" onclick="copyToClipboard('groupNameInput')">
                             <i class="fas fa-copy"></i>
                         </button>
                     </label>
+                    <datalist id="groupDatalist"></datalist>
 
                     <label for="pageTitle">
                         <input type="text" id="pageTitle" class="input" placeholder="Nombre de la página" required>
@@ -127,6 +128,12 @@
                         </button>
                     </label>
                     <img id="vistaprevia" src="./img/ico.png" alt="Vista previa de la imagen"  width="100" />
+                </div>
+                <div class="image-preview-options" id="imagePreviewOptions">
+                    <span class="preview-label">Previsualización:</span>
+                    <div class="preview-images" id="previewImages">
+                        <div class="preview-loading">Ingresa una URL para ver previews</div>
+                    </div>
                 </div>
                 <hr>
                 <button type="submit" id="submit" class="submit">Guardar</button>

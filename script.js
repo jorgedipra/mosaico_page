@@ -225,7 +225,7 @@ function deletePageDitect(groupName, pageIndex) {
 function editPage(groupName, pageIndex) {
     const page = data[groupName][pageIndex];
 
-    const groupNameInput = document.getElementById("groupName");
+    const groupNameInput = document.getElementById("groupNameInput");
     groupNameInput.value = groupName;
     groupNameInput.readOnly = true;
     document.getElementById("pageTitle").value = page.title;
@@ -246,7 +246,84 @@ imageURL.addEventListener("input", () => {
 });
 
 pageURL.addEventListener("input", () => {
-    img_loader()
+    img_loader();
+    suggestPageName();
+});
+
+function suggestPageName() {
+    const url = pageURL.value.trim();
+    const pageTitleInput = document.getElementById("pageTitle");
+    
+    if (!url) return;
+    
+    try {
+        const urlObj = new URL(url);
+        let name = urlObj.hostname.replace('www.', '');
+        name = name.split('.')[0];
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        
+        if (pageTitleInput.value === "" || pageTitleInput.dataset.suggested === "true") {
+            pageTitleInput.value = name;
+            pageTitleInput.dataset.suggested = "true";
+        }
+    } catch {
+        // URL inválida
+    }
+}
+
+document.getElementById("pageTitle").addEventListener("input", function() {
+    if (this.dataset.suggested === "true" && this.value !== "") {
+        this.dataset.suggested = "false";
+    }
+});
+
+async function loadImagePreviews(url, domain) {
+    const previewContainer = document.getElementById("previewImages");
+    
+    const previewSources = [
+        `https://api.faviconkit.com/${domain}/64`,
+        `https://logo.clearbit.com/${domain}`,
+        `https://www.favicon.im/real/${domain}.png`
+    ];
+    
+    previewContainer.innerHTML = "";
+    
+    for (let i = 0; i < previewSources.length; i++) {
+        const div = document.createElement("div");
+        div.className = "preview-item";
+        div.dataset.url = previewSources[i];
+        
+        const img = document.createElement("img");
+        img.src = previewSources[i];
+        img.alt = `Preview ${i + 1}`;
+        
+        img.onerror = () => {
+            div.style.display = "none";
+        };
+        
+        div.appendChild(img);
+        previewContainer.appendChild(div);
+        
+        div.addEventListener("click", () => {
+            document.querySelectorAll(".preview-item").forEach(p => p.classList.remove("selected"));
+            div.classList.add("selected");
+            document.getElementById("imageURL").value = previewSources[i];
+            img_loader();
+        });
+    }
+}
+
+pageURL.addEventListener("input", () => {
+    const url = pageURL.value.trim();
+    if (url) {
+        try {
+            const urlObj = new URL(url);
+            const domain = urlObj.hostname.replace('www.', '');
+            loadImagePreviews(url, domain);
+        } catch {
+            // URL inválida
+        }
+    }
 });
 
 function img_loader(){
@@ -274,7 +351,7 @@ function img_loader(){
 addPageForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const groupNameInput = document.getElementById("groupName");
+    const groupNameInput = document.getElementById("groupNameInput");
     const groupName = groupNameInput.value;
     const pageTitle = document.getElementById("pageTitle").value;
     const pageURL = document.getElementById("pageURL").value;
@@ -347,8 +424,15 @@ buscador.addEventListener('keypress', (e) => {
 addPageBtn.addEventListener("click", () => {
     addPageForm.reset();
     document.getElementById("modalTitle").textContent = "Agregar Página";
-    document.getElementById('groupName').readOnly = false; // Ensure it's editable
+    const groupNameInput = document.getElementById('groupNameInput');
+    groupNameInput.readOnly = false;
+    
+    const datalist = document.getElementById('groupDatalist');
+    const groupNames = Object.keys(data);
+    datalist.innerHTML = groupNames.map(name => `<option value="${name}">`).join('');
+    
     modal.classList.remove("hidden");
+    groupNameInput.focus();
 });
 
 // Abrir modal para mostrar todos los elementos de un grupo
@@ -390,7 +474,7 @@ function openGroupModal(groupName) {
     addPageToGroupBtn.addEventListener('click', () => {
         viewGroupModal.classList.add('hidden');
         addPageForm.reset();
-        const groupNameInput = document.getElementById('groupName');
+        const groupNameInput = document.getElementById('groupNameInput');
         document.getElementById('modalTitle').textContent = 'Agregar Página';
         groupNameInput.value = groupName;
         groupNameInput.readOnly = true; // Make it readonly
@@ -459,14 +543,14 @@ if (modalContent) {
 modal.addEventListener("click", (event) => {
     if (event.target === modal) {
         modal.classList.add("hidden");
-        document.getElementById('groupName').readOnly = false; // Reset readonly state
+        document.getElementById('groupNameInput').readOnly = false; // Reset readonly state
     }
 });
 
 // Escuchar el clic en el botón para cerrar el modal
 closeModal.addEventListener("click", (event) => {
     modal.classList.add("hidden");
-    document.getElementById('groupName').readOnly = false; // Reset readonly state
+    document.getElementById('groupNameInput').readOnly = false; // Reset readonly state
     event.stopPropagation(); // Evita que el evento se propague al contenedor principal
 });
 
