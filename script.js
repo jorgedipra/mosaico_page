@@ -16,6 +16,12 @@ const viewGroupTitle = document.getElementById("viewGroupTitle");
 const changeBackgroundModal = document.getElementById("changeBackgroundModal");
 const closeChangeBackgroundModal = document.getElementById("closeChangeBackgroundModal");
 const backgroundForm = document.getElementById("backgroundForm");
+const editGroupModal = document.getElementById("editGroupModal");
+const closeEditGroupModal = document.getElementById("closeEditGroupModal");
+const editGroupForm = document.getElementById("editGroupForm");
+const newGroupNameInput = document.getElementById("newGroupName");
+const editGroupTitle = document.getElementById("editGroupTitle");
+let currentEditGroup = "";
 
 // Obtener buscador
 const customSelect = document.querySelector('.custom-select');
@@ -71,42 +77,7 @@ function renderGroups() {
 
     enableDragAndDrop(); // Habilitar funcionalidad drag-and-drop solo si isEditMode es true
 }
-// Drag-and-Drop para los grupos
-function enableDragAndDrop() {
-    const groups = document.querySelectorAll(".group");
-
-    groups.forEach(group => {
-        group.addEventListener("dragstart", handleDragStart);
-        group.addEventListener("dragover", handleDragOver);
-        group.addEventListener("drop", handleDrop);
-        group.addEventListener("dragend", handleDragEnd);
-    });
-}
-
-let draggedGroup = null; // Elemento que se está arrastrando
-
-function handleDragStart(e) {
-    draggedGroup = this;
-    this.classList.add("dragging");
-}
-
-function handleDragOver(e) {
-    e.preventDefault(); // Permitir soltar
-    const afterElement = getDragAfterElement(groupContainer, e.clientY);
-    if (afterElement == null) {
-        groupContainer.appendChild(draggedGroup);
-    } else {
-        groupContainer.insertBefore(draggedGroup, afterElement);
-    }
-}
-
-function handleDrop() {
-    saveGroupOrder(); // Guardar el nuevo orden en localStorage
-}
-
-function handleDragEnd() {
-    this.classList.remove("dragging");
-}
+// Drag-and-Drop para los grupos (habilitado solo en modo edición)
 
 // Obtener el elemento después del cual se soltará el grupo
 function getDragAfterElement(container, y) {
@@ -125,7 +96,7 @@ function getDragAfterElement(container, y) {
 
 // Guardar el nuevo orden de los grupos en localStorage
 function saveGroupOrder() {
-    const newOrder = [...document.querySelectorAll(".group")].map(group => group.dataset.groupName);
+    const newOrder = [...document.querySelectorAll(".group")].map(group => group.querySelector("h3").textContent);
     const newData = {};
     newOrder.forEach(groupName => {
         newData[groupName] = data[groupName];
@@ -204,14 +175,20 @@ function deleteGroup(groupName) {
 
 // Editar grupo
 function editGroup(groupName) {
-    const newGroupName = prompt(`Ingresa el nuevo nombre para el grupo "${groupName}":`, groupName);
+    currentEditGroup = groupName;
+    newGroupNameInput.value = groupName;
+    editGroupTitle.textContent = `Editar: ${groupName}`;
+    editGroupModal.classList.remove("hidden");
+}
 
-    if (newGroupName && newGroupName !== groupName) {
-        // Create a new data object with the updated group name
+function saveGroupRename() {
+    const newGroupName = newGroupNameInput.value.trim();
+
+    if (newGroupName && newGroupName !== currentEditGroup) {
         const newData = {};
         Object.keys(data).forEach(key => {
-            if (key === groupName) {
-                newData[newGroupName] = data[groupName];
+            if (key === currentEditGroup) {
+                newData[newGroupName] = data[currentEditGroup];
             } else {
                 newData[key] = data[key];
             }
@@ -220,7 +197,10 @@ function editGroup(groupName) {
         data = newData;
         localStorage.setItem("pageGroups", JSON.stringify(data));
         renderGroups();
+        showToast(`Grupo renombrado a "${newGroupName}"`, "success");
     }
+    editGroupModal.classList.add("hidden");
+    currentEditGroup = "";
 }
 
 
@@ -243,10 +223,6 @@ function deletePageDitect(groupName, pageIndex) {
 
 // Función para editar páginas
 function editPage(groupName, pageIndex) {
-    isEditing = true;
-    editingGroup = groupName;
-    editingPageIndex = pageIndex;
-
     const page = data[groupName][pageIndex];
 
     const groupNameInput = document.getElementById("groupName");
@@ -306,21 +282,24 @@ addPageForm.addEventListener("submit", (e) => {
     if(!imageURL){
         imageURL=vistaprevia.src;
     }
-    
+
+    const editIndex = localStorage.getItem("pageIndex");
+    const editGroup = localStorage.getItem("groupName");
 
     if (!data[groupName]) {
         data[groupName] = [];
     }
 
-    data[groupName].push({ title: pageTitle, url: pageURL, image: imageURL });
+    if (editIndex !== "" && editGroup !== "") {
+        data[editGroup][editIndex] = { title: pageTitle, url: pageURL, image: imageURL };
+    } else {
+        data[groupName].push({ title: pageTitle, url: pageURL, image: imageURL });
+    }
 
     localStorage.setItem("pageGroups", JSON.stringify(data));
     renderGroups();
     modal.classList.add("hidden");
-    groupNameInput.readOnly = false; // Reset readonly state
-
-    if (localStorage.getItem("pageIndex") != "")
-        deletePageDitect(localStorage.getItem("groupName"), localStorage.getItem("pageIndex"));
+    groupNameInput.readOnly = false;
     localStorage.setItem('pageIndex', "");
     localStorage.setItem('groupName', "");
 });
@@ -445,6 +424,23 @@ closeViewGroupModal.addEventListener("click", (event) => {
     event.stopPropagation(); // Evita que el evento se propague al contenedor principal
 });
 
+// Edit group modal handlers
+closeEditGroupModal.addEventListener("click", () => {
+    editGroupModal.classList.add("hidden");
+    currentEditGroup = "";
+});
+
+editGroupModal.addEventListener("click", (event) => {
+    if (event.target === editGroupModal) {
+        editGroupModal.classList.add("hidden");
+        currentEditGroup = "";
+    }
+});
+
+editGroupForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    saveGroupRename();
+});
 
 
 closeModal.addEventListener("click", () => modal.classList.add("hidden"));
@@ -481,6 +477,7 @@ closeModal.addEventListener("click", (event) => {
 changeBackgroundBtn.addEventListener("click", () => {
     document.getElementById("backgroundColor").value = backgroundColor;
     document.getElementById("backgroundImage").value = backgroundImage;
+    document.getElementById("backgroundImageFile").value = "";
     const preview = document.getElementById("backgroundPreview");
     if (backgroundImage) {
         preview.src = backgroundImage;
@@ -548,39 +545,102 @@ function updateClearButton() {
 }
 
 // Cerrar modal de cambiar fondo
-closeChangeBackgroundModal.addEventListener("click", () => changeBackgroundModal.classList.add("hidden"));
-// viewGroupModal.addEventListener("click", () => viewGroupModal.classList.add("hidden"));
-
-const modalContent2 = document.querySelector('#viewGroupModal .modal-content');
-
-if (modalContent2) {
-    modalContent2.addEventListener("click", (event) => {
-        // event.preventDefault(); 
-        // event.stopPropagation(); 
-        // return false; 
-    });
+function closeBackgroundModal() {
+    changeBackgroundModal.classList.add("hidden");
+    document.getElementById("backgroundImageFile").value = "";
 }
+
+closeChangeBackgroundModal.addEventListener("click", (event) => {
+    closeBackgroundModal();
+    event.stopPropagation();
+});
 
 changeBackgroundModal.addEventListener("click", (event) => {
     if (event.target === changeBackgroundModal) {
-        changeBackgroundModal.classList.add("hidden");
+        closeBackgroundModal();
     }
-  });
+});
 
-  // Escuchar el clic en el botón para cerrar el modal
-  closeChangeBackgroundModal.addEventListener("click", (event) => {
-    changeBackgroundModal.classList.add("hidden");
-    event.stopPropagation(); // Evita que el evento se propague al contenedor principal
-  });
+// Galería de fondos
+const galleryModal = document.getElementById("galleryModal");
+const closeGalleryModal = document.getElementById("closeGalleryModal");
+const galleryContainer = document.getElementById("galleryContainer");
+const openGalleryBtn = document.getElementById("openGalleryBtn");
+
+const galleryImages = [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920",
+    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1920",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1920",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920",
+    "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1920",
+    "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=1920",
+    "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1920",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1920",
+    "https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=1920",
+    "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920",
+    "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1920",
+    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=1920",
+    "https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?w=1920"
+];
+
+function renderGallery() {
+    galleryContainer.innerHTML = galleryImages.map((url, index) => `
+        <div class="gallery-item" data-url="${url}">
+            <img src="${url}" alt="Fondo ${index + 1}" loading="lazy">
+        </div>
+    `).join("");
+
+    galleryContainer.querySelectorAll(".gallery-item").forEach(item => {
+        item.addEventListener("click", () => {
+            const url = item.dataset.url;
+            document.getElementById("backgroundImage").value = url;
+            document.getElementById("backgroundPreview").src = url;
+            document.getElementById("backgroundPreview").classList.remove("hidden");
+            galleryModal.classList.add("hidden");
+        });
+    });
+}
+
+openGalleryBtn.addEventListener("click", () => {
+    renderGallery();
+    galleryModal.classList.remove("hidden");
+});
+
+closeGalleryModal.addEventListener("click", () => {
+    galleryModal.classList.add("hidden");
+});
+
+galleryModal.addEventListener("click", (event) => {
+    if (event.target === galleryModal) {
+        galleryModal.classList.add("hidden");
+    }
+});
 
 
-
+// Validar URL de imagen
+function isValidImageUrl(url) {
+    if (!url) return true;
+    try {
+        const valid = /^https?:\/\//.test(url) || /^data:image\//.test(url) || url.startsWith('./') || url.startsWith('img/');
+        return valid;
+    } catch {
+        return false;
+    }
+}
 
 // Aplicar cambio de fondo
 backgroundForm.addEventListener("submit", (e) => {
     e.preventDefault();
     backgroundColor = document.getElementById("backgroundColor").value;
     backgroundImage = document.getElementById("backgroundImage").value;
+
+    if (!isValidImageUrl(backgroundImage)) {
+        showToast("URL de imagen inválida", "error");
+        return;
+    }
 
     localStorage.setItem("backgroundColor", backgroundColor);
     localStorage.setItem("backgroundImage", backgroundImage);
@@ -589,7 +649,7 @@ backgroundForm.addEventListener("submit", (e) => {
     document.body.style.backgroundImage = backgroundImage ? `url(${backgroundImage})` : "none";
     document.body.style.backgroundSize = "cover";
 
-    changeBackgroundModal.classList.add("hidden");
+    closeBackgroundModal();
     document.body.style.display = "none";
     document.body.offsetHeight;
     document.body.style.display = "";
@@ -642,10 +702,9 @@ function createToastContainer() {
 }
 
 function showToast(message, type = 'success', duration = 3000) {
-    const container = document.getElementById('toast-container');
+    let container = document.getElementById('toast-container');
     if (!container) {
-        console.error('Toast container not found!');
-        return;
+        container = createToastContainer();
     }
     
     const toast = document.createElement('div');

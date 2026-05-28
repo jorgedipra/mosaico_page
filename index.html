@@ -143,6 +143,21 @@
         </div>
     </div>
 
+    <!-- Modal para editar nombre del grupo -->
+    <div id="editGroupModal" class="modal hidden">
+        <div class="modal-content form">
+            <span id="closeEditGroupModal" class="close">&times;</span>
+            <h2 id="editGroupTitle" class="title">Editar Nombre</h2>
+            <form id="editGroupForm">
+                <label for="newGroupName">
+                    <input type="text" id="newGroupName" class="input" placeholder="Nuevo nombre" required>
+                    <span>Nuevo nombre:</span>
+                </label>
+                <button type="submit" class="submit">Guardar</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal para cambiar el fondo -->
     <div id="changeBackgroundModal" class="modal hidden">
         <div class="modal-content">
@@ -162,9 +177,21 @@
                 </div>
                 <img id="backgroundPreview" src="" alt="Vista previa" class="background-preview hidden">
 
+                <button type="button" id="openGalleryBtn" class="gallery-btn">
+                    <i class="fas fa-images"></i> Galería de Fondos
+                </button>
                 <button type="submit">Aplicar</button>
             </form>
         </div>
+    </div>
+
+    <!-- Modal Galería de Fondos -->
+    <div id="galleryModal" class="modal hidden">
+        <div class="modal-content gallery-modal">
+            <span id="closeGalleryModal" class="close">&times;</span>
+            <h2>Galería de Fondos</h2>
+            <p class="gallery-credit">Imágenes de <a href="https://unsplash.com" target="_blank">Unsplash</a> (gratuitas)</p>
+            <div id="galleryContainer" class="gallery-grid scroll scroll-1"></div>
     </div>
 
 <script src="https://jorgedipra.github.io/LocalSQLite.js/lib/LocalSQLite.js"></script>
