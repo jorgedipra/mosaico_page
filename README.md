@@ -1,59 +1,81 @@
-# Prototipo de Página de Inicio para Navegador (Inspirado en Opera GX)
+# Mosaico de Páginas - Página de Inicio para Navegador
 
-Este proyecto es un prototipo de página de inicio para un navegador web, inspirado en la estética y funcionalidad de **Opera GX**, el navegador personalizado para gamers. El objetivo de este prototipo es replicar los elementos visuales clave y las funcionalidades de Opera GX, creando una interfaz de usuario interactiva y estilizada.
+Página de inicio estática inspirada en Opera GX con estética pixel-art y funcionalidades de organización de enlaces.
 
 ## Características
 
-- **Diseño inspirador**: Basado en el diseño de Opera GX, con un enfoque en la personalización visual y la estética moderna.
-- **Componentes clave**: Incluye elementos como barra de navegación, opciones de personalización, y widgets inspirados en la interfaz de usuario de Opera GX.
-- **Responsividad**: El prototipo está diseñado para ser responsivo, adaptándose bien a dispositivos de escritorio.
-- **Interactividad**: Prototipo interactivo con elementos de diseño que simulan una experiencia de navegador real.
+### Gestión de Grupos y Páginas
+- **Grupos organizados**: Crea grupos personalizados para categorize tus páginas
+- **Drag & Drop**: Reordena grupos y páginas arrastrándolos
+- **Selector de grupo**: Lista desplegable con grupos existentes + opción de crear nuevo
+- **Edición simple**: Renombra o elimina grupos y páginas fácilmente
+
+### Buscador Multi-Motor
+- **Google**: Búsqueda estándar
+- **ChatGPT**: Busca directamente en ChatGPT
+- **DuckDuckGo**: Alternativa privada
+
+### Personalización de Fondo
+- **Color de fondo**: Selector de color
+- **URL de imagen**: Pegar enlace a imagen
+- **Cargar archivo**: Subir imagen desde tu computadora
+- **Galería de fondos**: Colección de fondos de Unsplash
+
+### Iconos y Favicons
+- **Autocompletado de nombre**: Sugiere automáticamente el nombre de la página desde la URL
+- **Iconos predefinidos**: Selecciona iconos de Simple Icons, Iconify o SVGRepo
+- **Favicon automático**: Obtiene favicon desde la URL o usa alternativo
+
+### Datos y Privacidad
+- **LocalStorage**: Todos los datos se guardan localmente en tu navegador
+- **Exportar**: Descarga tus grupos como archivo `.txt`
+- **Importar**: Restaura tus datos desde un archivo
 
 ## Tecnologías Utilizadas
 
-- **HTML5**: Estructura básica de la página.
-- **CSS3**: Estilos para darle vida a la interfaz, incluyendo un esquema de colores y efectos visuales.
-- **JavaScript**: Funcionalidad básica para simular la experiencia de usuario, incluyendo interacciones.
+- **HTML5**: Estructura semántica
+- **CSS3**: Estilos con tema oscuro (#1a1a1a) y acento verde (#5cdb95)
+- **JavaScript**: Vanilla JS, sin frameworks
+- **Font Awesome 6.0.0**: Iconos
+- **Google Fonts**: Press Start 2P, Orbitron
 
-## Vista
-![image](https://github.com/user-attachments/assets/c12c5995-af77-4a77-814d-b96625aadea6)
-![image](https://github.com/user-attachments/assets/2555dfda-8c93-4ff1-b818-daf6c48f7831)
+## Estructura del Proyecto
 
-![image](https://github.com/user-attachments/assets/3f4c0039-1ef3-4991-a6fd-ab99465aa6ac)
-## Vista final:
-![image](https://github.com/user-attachments/assets/4e619844-853e-492c-b7de-d5ff10c9c7a9)
-
+```
+├── index.html          # Punto de entrada
+├── styles.css          # Estilos completos
+├── script.js           # JavaScript completo
+├── img/                # Imágenes y favicon
+├── Orbitron/           # Fuente personalizada
+└── README.md           # Este archivo
+```
 
 ## Instalación
 
-Para usar este prototipo en tu entorno local, sigue estos pasos:
-
-1. Clona este repositorio en tu máquina local:
-
+1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/prototipo-navegador.git
+   git clone https://github.com/tu-usuario/mosaico_page.git
    ```
 
-2. Navega al directorio del proyecto:
+2. Abre `index.html` en tu navegador
 
-   ```bash
-   cd prototipo-navegador
-   ```
-
-3. Abre el archivo `index.html` en tu navegador para ver el prototipo en acción.
+O usa un servidor local:
+```bash
+npx serve .
+python -m http.server 8000
+```
 
 ## Uso
 
-Este prototipo simula la página de inicio de un navegador con los siguientes elementos:
+1. **Agregar Página**: Clic en "Agregar Página", selecciona o crea un grupo, ingresa la URL
+2. **Editar Fondo**: Clic en "Cambiar Fondo" y elige color, URL, archivo o galería
+3. **Modo Edición**: Activa el modo edición para reordernar o eliminar elementos
+4. **Exportar/Importar**: Guarda o restaura tus datos desde archivos
 
-- **Barras de navegación personalizables**.
-- **Widgets de personalización** para cambiar fondos y colores.
-- **Interacción visual dinámica** con los elementos de la página.
+## Vista
 
-## Contribuciones
-
-Las contribuciones son bienvenidas. Si deseas mejorar el proyecto, puedes hacer un **fork** y enviar un **pull request** con tus cambios. Asegúrate de que el código esté bien documentado y probado antes de enviarlo.
+![Vista principal](https://github.com/user-attachments/assets/c12c5995-af77-4a77-814d-b96625aadea6)
 
 ## Licencia
 
-Este proyecto está bajo la **Licencia MIT**. Puedes usarlo, modificarlo y distribuirlo de acuerdo a los términos de la licencia.
+MIT License
