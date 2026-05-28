@@ -35,6 +35,25 @@ let data = JSON.parse(localStorage.getItem("pageGroups")) || {};
 let backgroundColor = localStorage.getItem("backgroundColor") || "#1a1a1a";
 let backgroundImage = localStorage.getItem("backgroundImage") || "";
 
+if (Object.keys(data).length === 0) {
+    data = {
+        "Streaming": [
+            { title: "YouTube", url: "https://www.youtube.com/", image: "https://cdn.simpleicons.org/youtube" }
+        ],
+        "Productividad": [
+            { title: "Notion", url: "https://www.notion.so/", image: "https://cdn.simpleicons.org/notion" }
+        ],
+        "IA": [
+            { title: "Claude", url: "https://claude.ai/", image: "https://cdn.simpleicons.org/claudeai" },
+            { title: "ChatGPT", url: "https://chatgpt.com/", image: "https://cdn.simpleicons.org/openai" },
+            { title: "Gemini", url: "https://gemini.google.com/app?hl=es", image: "https://cdn.simpleicons.org/google" },
+            { title: "DeepSeek", url: "https://chat.deepseek.com/", image: "https://cdn.simpleicons.org/deepseek" },
+            { title: "Kimi", url: "https://www.kimi.com/", image: "https://cdn.simpleicons.org/kimi" }
+        ]
+    };
+    localStorage.setItem("pageGroups", JSON.stringify(data));
+}
+
 // Aplicar fondo
 document.body.style.backgroundColor = backgroundColor;
 if (backgroundImage) {
