@@ -155,6 +155,13 @@
                 <label for="backgroundImage">URL de Imagen de Fondo:</label>
                 <input type="url" id="backgroundImage" placeholder="images/fondo2.png">
 
+                <label for="backgroundImageFile" class="file-label">O cargar imagen:</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="backgroundImageFile" accept="image/*">
+                    <button type="button" id="clearImageBtn" class="clear-btn hidden">Limpiar</button>
+                </div>
+                <img id="backgroundPreview" src="" alt="Vista previa" class="background-preview hidden">
+
                 <button type="submit">Aplicar</button>
             </form>
         </div>

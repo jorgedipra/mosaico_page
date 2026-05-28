@@ -481,8 +481,71 @@ closeModal.addEventListener("click", (event) => {
 changeBackgroundBtn.addEventListener("click", () => {
     document.getElementById("backgroundColor").value = backgroundColor;
     document.getElementById("backgroundImage").value = backgroundImage;
+    const preview = document.getElementById("backgroundPreview");
+    if (backgroundImage) {
+        preview.src = backgroundImage;
+        preview.classList.remove("hidden");
+        preview.onerror = () => {
+            preview.src = "./img/sin_fondo.png";
+        };
+    } else {
+        preview.src = "./img/sin_fondo.png";
+        preview.classList.remove("hidden");
+    }
+    updateClearButton();
     changeBackgroundModal.classList.remove("hidden");
 });
+
+const backgroundImageFile = document.getElementById("backgroundImageFile");
+const clearImageBtn = document.getElementById("clearImageBtn");
+const backgroundPreview = document.getElementById("backgroundPreview");
+const backgroundImageInput = document.getElementById("backgroundImage");
+
+backgroundImageFile.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const imageData = event.target.result;
+            backgroundImageInput.value = imageData;
+            backgroundPreview.src = imageData;
+            backgroundPreview.classList.remove("hidden");
+            updateClearButton();
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+backgroundImageInput.addEventListener("input", () => {
+    const url = backgroundImageInput.value.trim();
+    if (url) {
+        backgroundPreview.src = url;
+        backgroundPreview.classList.remove("hidden");
+        backgroundPreview.onerror = () => {
+            preview.src = "./img/sin_fondo.png";
+        };
+    } else {
+        backgroundPreview.src = "./img/sin_fondo.png";
+        backgroundPreview.classList.remove("hidden");
+    }
+    updateClearButton();
+});
+
+clearImageBtn.addEventListener("click", () => {
+    backgroundImageFile.value = "";
+    backgroundImageInput.value = "";
+    backgroundPreview.src = "./img/sin_fondo.png";
+    updateClearButton();
+});
+
+function updateClearButton() {
+    const hasImage = document.getElementById("backgroundImage").value || backgroundImageFile.files.length > 0;
+    if (hasImage) {
+        clearImageBtn.classList.remove("hidden");
+    } else {
+        clearImageBtn.classList.add("hidden");
+    }
+}
 
 // Cerrar modal de cambiar fondo
 closeChangeBackgroundModal.addEventListener("click", () => changeBackgroundModal.classList.add("hidden"));
@@ -523,12 +586,13 @@ backgroundForm.addEventListener("submit", (e) => {
     localStorage.setItem("backgroundImage", backgroundImage);
 
     document.body.style.backgroundColor = backgroundColor;
-    if (backgroundImage) {
-        document.body.style.backgroundImage = `url(${backgroundImage})`;
-        document.body.style.backgroundSize = "cover";
-    }
+    document.body.style.backgroundImage = backgroundImage ? `url(${backgroundImage})` : "none";
+    document.body.style.backgroundSize = "cover";
 
     changeBackgroundModal.classList.add("hidden");
+    document.body.style.display = "none";
+    document.body.offsetHeight;
+    document.body.style.display = "";
 });
 // TIME
 
